@@ -2,9 +2,9 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub struct PPMImage {
-    pub width: usize,
-    pub height: usize,
-    pub data: Vec<u8>,
+    width: usize,
+    height: usize,
+    pixels: Vec<u8>,
 }
 
 #[wasm_bindgen]
@@ -19,9 +19,9 @@ impl PPMImage {
         self.height
     }
 
-    #[wasm_bindgen(getter)]
+    #[wasm_bindgen]
     pub fn data(&self) -> Vec<u8> {
-        self.data.clone()
+        self.pixels.clone()
     }
 }
 
@@ -71,6 +71,6 @@ pub fn parse_ppm(ppm_text: &str) -> Result<PPMImage, JsValue> {
     Ok(PPMImage {
         width,
         height,
-        data: pixel_values,
+        pixels: pixel_values,
     })
 }

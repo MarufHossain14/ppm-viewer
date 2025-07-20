@@ -1,34 +1,76 @@
-<!-- static/index.html -->
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>PPM Viewer</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 20px;
-    }
-    canvas {
-      border: 1px solid black;
-      margin-top: 20px;
-    }
-  </style>
-</head>
-<body>
-  <h1>PPM Viewer (Rust + WASM)</h1>
-  <input type="file" id="fileInput" accept=".ppm"><br>
-  <canvas id="canvas"></canvas>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PPM Viewer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>PPM Image Viewer</h1>
+      <p>Select a PPM file (P3 format) to view:</p>
+      <input type="file" id="fileInput" accept=".ppm" />
+      <div id="info" class="info"></div>
+      <canvas id="canvas"></canvas>
+    </div>
 
-  <script type="module">
-    import init, { greet } from "../pkg/ppm_viewer.js";
+    <script type="module">
+      import init, { parse_ppm } from "../pkg/ppm_viewer.js";
 
-    async function main() {
-      await init();
-      console.log(greet());  // Should print "Hello from Rust!"
-    }
+      async function main() {
+        try {
+          await init();
+          console.log("WASM module loaded successfully");
+        } catch (err) {
+          console.error("Failed to load WASM module:", err);
+          alert(
+            "Failed to load WASM module. Make sure the project is built correctly."
+          );
+          return;
+        }
 
-    main();
-  </script>
-</body>
+        const fileInput = document.getElementById("fileInput");
+        const canvas = document.getElementById("canvas");
+        const info = document.getElementById("info");
+
+        fileInput.addEventListener("change", async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+
+          try {
+            const text = await file.text();
+            console.log("File loaded, parsing PPM...");
+
+            const image = parse_ppm(text);
+            console.log(
+              `PPM parsed successfully: ${image.width}x${image.height}`
+            );
+
+            canvas.width = image.width;
+            canvas.height = image.height;
+            const ctx = canvas.getContext("2d");
+            const imgData = ctx.createImageData(image.width, image.height);
+
+            const pixels = image.data();
+            for (let i = 0, j = 0; i < pixels.length; i += 3, j += 4) {
+              imgData.data[j] = pixels[i]; // R
+              imgData.data[j + 1] = pixels[i + 1]; // G
+              imgData.data[j + 2] = pixels[i + 2]; // B
+              imgData.data[j + 3] = 255; // Alpha
+            }
+
+            ctx.putImageData(imgData, 0, 0);
+            info.textContent = `Image loaded: ${image.width}x${image.height} pixels`;
+          } catch (err) {
+            console.error("Error processing PPM file:", err);
+            alert("Failed to load PPM: " + err);
+            info.textContent = "Error loading image";
+          }
+        });
+      }
+
+      main();
+    </script>
+  </body>
 </html>
