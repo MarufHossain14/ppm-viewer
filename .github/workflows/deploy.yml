@@ -36,9 +36,6 @@ jobs:
       - name: Build WASM package
         run: wasm-pack build --target web --out-dir pkg
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
       - name: Create deployment directory
         run: |
           mkdir -p dist
@@ -51,6 +48,7 @@ jobs:
           path: ./dist
 
   deploy:
+    if: github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
