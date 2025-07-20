@@ -4,7 +4,8 @@ A simple web app to view PPM (P3) images using Rust and WebAssembly.
 
 ## Live Demo
 
-🚀 **[Try the live demo on GitHub Pages](https://[your-username].github.io/ppm-viewer/)**
+🚀 **[Try the live demo on GitHub Pages](
+marufhossain14.github.io/ppm-viewer/ )**
 
 ## Usage
 
