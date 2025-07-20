@@ -2,9 +2,9 @@
 /target/
 **/*.rs.bk
 
-# wasm-pack generated
-/pkg/
-*.wasm
+# wasm-pack generated (commented out for GitHub Pages deployment)
+# /pkg/
+# *.wasm
 
 # Node dependencies (if you’re using npm for the frontend)
 /node_modules/
