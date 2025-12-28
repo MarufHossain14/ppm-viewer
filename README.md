@@ -1,11 +1,29 @@
 # PPM Viewer
 
-A simple web app to view PPM (P3) images using Rust and WebAssembly.
+Web-based PPM (P3 format) image viewer using Rust and WebAssembly. Client-side processing for fast, privacy-preserving image rendering.
 
-## Live Demo
-🚀 **[Try the live demo on GitHub Pages](https://marufhossain14.github.io/ppm-viewer/)**
+**[Live Demo](https://marufhossain14.github.io/ppm-viewer/)**
 
-## Usage
+## Why WebAssembly?
+
+Traditional JavaScript struggles with image parsing performance. WebAssembly provides near-native speed for compute-intensive operations while keeping all processing client-side.
+
+## Tech Stack
+
+- **Rust** - Systems language that compiles the parsing logic into WebAssembly
+- **WebAssembly (WASM)** - Binary format that runs at near-native speed in browsers
+- **wasm-bindgen** - Bridge between Rust code and JavaScript
+- **HTML5 Canvas** - Web API for drawing the image pixels on screen
+
+## Features
+
+- Parse and render PPM P3 format images
+- Comment filtering in headers
+- Dimension and pixel validation
+- Client-side processing (no uploads)
+
+
+## Quick Start
 
 ### Local Development
 
@@ -13,28 +31,14 @@ A simple web app to view PPM (P3) images using Rust and WebAssembly.
    ```bash
    wasm-pack build --target web
    ```
-2. Start a local server in the project folder (e.g. with Python):
+2. Start a local server:
    ```bash
    python serve.py
    ```
-3. Open `static/index.html` in your browser (via the local server).
-4. Upload a PPM (P3) file to view it.
-
-### GitHub Pages Deployment
-
-This project is configured for automatic deployment to GitHub Pages:
-
-1. Fork or clone this repository
-2. Enable GitHub Pages in repository settings (Source: GitHub Actions)
-3. Push changes to the `main` branch
-4. GitHub Actions will automatically build and deploy the site
+3. Open `http://localhost:8000/static/` and upload a PPM file
 
 ## Requirements
 
-- Rust
-- wasm-pack
-- Python (for local server only)
-
----
-
-All code is in `src/lib.rs` (Rust) and `static/` (frontend).
+- [Rust](https://www.rust-lang.org/tools/install)
+- [wasm-pack](https://drager.github.io/wasm-pack/)
+- Python 3 (for local server)
